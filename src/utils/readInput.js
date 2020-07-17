@@ -17,8 +17,10 @@ function readInput({ args }, argvCallback, stdinCallback) {
     if (args.length) {
       return resolve(argvCallback(args))
     }
+    const buffer = []
     process.stdin.setEncoding('utf8')
-    process.stdin.on('data', data => resolve(stdinCallback(data)))
+    process.stdin.on('data', data => buffer.push(data))
+    process.stdin.on('end', () => resolve(stdinCallback(buffer.join(''))))
   })
 }
 
