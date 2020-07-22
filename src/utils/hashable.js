@@ -15,7 +15,7 @@
 const fs = require('fs')
 const path = require('path')
 const { readInput, parseArgs } = require('./readInput')
-const defaultSort = ['language', 'name', 'id', 'value', 'label', 'category_id']
+const defaultSort = ['language', 'id', 'name', 'store_id', 'category_id', 'value', 'label']
 
 if (module && module.parent) {
   module.exports = {
