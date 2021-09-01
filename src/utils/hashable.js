@@ -57,7 +57,7 @@ function hashable(data, priority = defaultSort) {
 
   Object.keys(data).forEach(key => {
     if (Array.isArray(data[key])) {
-      data[key] = data[key].sort((a, b) => {
+      data[key] = data[key].filter(e => e !== null).sort((a, b) => {
         if (['number', 'string'].includes(typeof a)) return sortBy(a, b)
 
         for (var i in priority) {
