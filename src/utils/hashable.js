@@ -74,13 +74,12 @@ function hashable(data, sortOptions) {
         console.error('hashable sorting', a, b)
       })
       data[key] = data[key].map(obj => hashable(obj, sortOptions))
-      return data[key]
+      return
     }
     if (_isObject(data[key])) {
       data[key] = hashable(data[key], sortOptions)
-      return data[key]
+      return
     }
-    return data[key]
   })
 
   if (sortOptions.sortObject) {
