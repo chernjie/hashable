@@ -3,7 +3,7 @@
 /**
  * Generate consistent hashable JSON payload
  *   great for piping through hash functions
- *   (does not sort object keys)
+ *   (can sort object keys with --sort-object option)
  * 
  * Usage:
  *   $0 first.json second.json
@@ -27,19 +27,25 @@ if (module && module.parent) {
 
 async function useCommandLine(argv) {
   const { args, options } = parseArgs(argv)
+  const sortObject = options['sort-object'] || false
   const inPlace = options['in-place'] || false
-  const priority = (options['sort'] || '').split(',').concat(defaultSort)
+  const priority = (options['array-priority'] || '').split(',').concat(defaultSort)
+  const sortOptions = {
+    sortObject,
+    priority
+  }
   const fileInputHandler = files => files
     .map(file => path.resolve(process.cwd(), file))
     .map(file => ({ file, content: require(file) }))
-    .map(data => ({ ...data, content: hashable(data.content, priority) }))
+    .map(data => ({ ...data, content: hashable(data.content, sortOptions) }))
     .map(({ file, content }) => inPlace
       ? fs.writeFile(file, JSON.stringify(content, null, 2), () => {})
       : content
     )
+
   const dataInputHandler = data => {
     try {
-      return hashable(JSON.parse(data), priority)
+      return hashable(JSON.parse(data), sortOptions)
     } catch (e) {
       console.error('JSON.parse', e)
       process.exit(1)
@@ -52,7 +58,7 @@ async function useCommandLine(argv) {
   }
 }
 
-function hashable(data, priority = defaultSort) {
+function hashable(data, sortOptions) {
   if (!_isObject(data)) return data
 
   Object.keys(data).forEach(key => {
@@ -60,20 +66,26 @@ function hashable(data, priority = defaultSort) {
       data[key] = data[key].filter(e => e !== null).sort((a, b) => {
         if (['number', 'string'].includes(typeof a)) return sortBy(a, b)
 
-        for (var i in priority) {
-          const field = priority[i]
+        for (var i in sortOptions.priority) {
+          const field = sortOptions.priority[i]
           const first = _get(a, field)
           if (typeof first !== 'undefined') return sortBy(first, _get(b, field))
         }
         console.error('hashable sorting', a, b)
       })
-      return data[key].map(obj => hashable(obj, priority))
+      data[key] = data[key].map(obj => hashable(obj, sortOptions))
+      return data[key]
     }
     if (_isObject(data[key])) {
-      return hashable(data[key], priority)
+      data[key] = hashable(data[key], sortOptions)
+      return data[key]
     }
     return data[key]
   })
+
+  if (sortOptions.sortObject) {
+    data = sortObjectByKeys(data)
+  }
 
   return data
 }
@@ -81,6 +93,16 @@ function hashable(data, priority = defaultSort) {
 function sortBy(a, b) {
   if (a === b) return 0
   return a > b ? 1 : -1
+}
+
+function sortObjectByKeys(obj) {
+  sorted = Object.keys(obj)
+  .sort()
+  .reduce((accumulator, key) => {
+    accumulator[key] = obj[key];
+    return accumulator;
+  }, {});
+  return sorted;
 }
 
 function _get(obj, path) {
