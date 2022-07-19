@@ -30,10 +30,10 @@ async function useCommandLine(argv) {
   const sortObject = options['sort-object'] || false
   const inPlace = options['in-place'] || false
   if (options['sort']) console.error('@deprecated use --priority')
-  const priority = (options['priority'] || options['sort'] | '').split(',').concat(defaultSort)
+  const priority = (options['priority'] || options['sort'] || '').split(',').concat(defaultSort)
   const sortOptions = {
-    sortObject,
-    priority
+    priority,
+    sortObject
   }
   const fileInputHandler = files => files
     .map(file => path.resolve(process.cwd(), file))
@@ -67,23 +67,23 @@ function hashable(data, { priority = defaultSort, sortObject = false }) {
       data[key] = data[key].filter(e => e !== null).sort((a, b) => {
         if (['number', 'string'].includes(typeof a)) return sortBy(a, b)
 
-        for (var i in sortOptions.priority) {
-          const field = sortOptions.priority[i]
+        for (var i in priority) {
+          const field = priority[i]
           const first = _get(a, field)
           if (typeof first !== 'undefined') return sortBy(first, _get(b, field))
         }
         console.error('hashable sorting', a, b)
       })
-      data[key] = data[key].map(obj => hashable(obj, sortOptions))
+      data[key] = data[key].map(obj => hashable(obj, { priority, sortObject }))
       return
     }
     if (_isObject(data[key])) {
-      data[key] = hashable(data[key], sortOptions)
+      data[key] = hashable(data[key], { priority, sortObject })
       return
     }
   })
 
-  if (sortOptions.sortObject) {
+  if (sortObject) {
     data = sortObjectByKeys(data)
   }
 
