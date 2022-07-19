@@ -59,7 +59,7 @@ async function useCommandLine(argv) {
   }
 }
 
-function hashable(data, { priority = defaultSort, sortObject = false }) {
+function hashable(data, { priority = defaultSort, sortObject = false } = {}) {
   if (!_isObject(data)) return data
 
   Object.keys(data).forEach(key => {
