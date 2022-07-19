@@ -29,7 +29,8 @@ async function useCommandLine(argv) {
   const { args, options } = parseArgs(argv)
   const sortObject = options['sort-object'] || false
   const inPlace = options['in-place'] || false
-  const priority = (options['array-priority'] || '').split(',').concat(defaultSort)
+  if (options['sort']) console.error('@deprecated use --priority')
+  const priority = (options['priority'] || options['sort'] | '').split(',').concat(defaultSort)
   const sortOptions = {
     sortObject,
     priority
