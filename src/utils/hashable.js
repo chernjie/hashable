@@ -3,7 +3,12 @@
 /**
  * Generate consistent hashable JSON payload
  *   great for piping through hash functions
- *   (can sort object keys with --sort-object option)
+ * Use --sort-object to sort object keys
+ * Use --in-place to overwrite the original
+ *   JSON payload
+ * Use --priority to specify array sorting
+ *   priority (default priority is used
+ *   if not specified)
  * 
  * Usage:
  *   $0 first.json second.json
@@ -15,7 +20,7 @@
 const fs = require('fs')
 const path = require('path')
 const { readInput, parseArgs } = require('./readInput')
-const defaultSort = ['language', 'id', 'name', 'store_id', 'category_id', 'value', 'label']
+const defaultSort = ['id', '_id', 'name', 'category', 'value', 'label', 'page']
 
 if (module && module.parent) {
   module.exports = {
