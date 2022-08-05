@@ -23,6 +23,8 @@ const sample1 = {
         ]
 }
 
+const sample1String = `{"id":"0002","type":"donut","name":"Raised","ppu":0.55,"batters":{"batter":[{"id":"1001","type":"Regular"},{"type":"Large","id":"0001"}]},"topping":[{"id":"5001","type":"None"},{"type":"Glazed","id":"5002"},{"id":"5005","type":"Sugar"},{"id":"5003","type":"Chocolate","aaa":"boss"},{"id":"5004","type":"Maple"}]}`
+
 const arraySorted1 = {
     "id": "0002",
     "type": "donut",
@@ -126,12 +128,19 @@ const allSorted2 = {
 }
 
 describe('hashable returns the desired sorted JSON', () => {
+    it('hashable does not change the input objects', () => {
+        expect(JSON.stringify(hashable(sample1, { sortObject: true }))).toBe(JSON.stringify(allSorted1))
+        expect(JSON.stringify(sample1)).toBe(sample1String)
+    })
+
     it('hashable sorts array only for sample JSON 1', () => {
         expect(JSON.stringify(hashable(sample1))).toBe(JSON.stringify(arraySorted1))
+        expect(JSON.stringify(sample1)).toBe(sample1String)
     })
     
     it('hashable sorts array and object for sample JSON 1', () => {
         expect(JSON.stringify(hashable(sample1, { sortObject: true }))).toBe(JSON.stringify(allSorted1))
+        expect(JSON.stringify(sample1)).toBe(sample1String)
     })
 
     it('hashable sorts array and object for sample JSON 2', () => {
