@@ -67,9 +67,12 @@ async function useCommandLine(argv) {
 function hashable(data, { priority = defaultSort, sortObject = false } = {}) {
   if (!_isObject(data)) return data
 
+  let sorted = {}
   Object.keys(data).forEach(key => {
+    // array
     if (Array.isArray(data[key])) {
-      data[key] = data[key].filter(e => e !== null).sort((a, b) => {
+      sorted[key] = data[key].filter(e => e !== null)
+      .sort((a, b) => {
         if (['number', 'string'].includes(typeof a)) return sortBy(a, b)
 
         for (var i in priority) {
@@ -79,20 +82,25 @@ function hashable(data, { priority = defaultSort, sortObject = false } = {}) {
         }
         console.error('hashable sorting', a, b)
       })
-      data[key] = data[key].map(obj => hashable(obj, { priority, sortObject }))
-      return
+      .map(obj => hashable(obj, { priority, sortObject }))
     }
-    if (_isObject(data[key])) {
-      data[key] = hashable(data[key], { priority, sortObject })
-      return
+    
+    // object
+    else if (_isObject(data[key])) {
+      sorted[key] = hashable(data[key], { priority, sortObject })
+    }
+
+    // primitive
+    else {
+      sorted[key] = data[key]
     }
   })
 
   if (sortObject) {
-    data = sortObjectByKeys(data)
+    sorted = sortObjectByKeys(sorted)
   }
 
-  return data
+  return sorted
 }
 
 function sortBy(a, b) {
