@@ -45,7 +45,7 @@ async function useCommandLine(argv) {
     .map(file => ({ file, content: require(file) }))
     .map(data => ({ ...data, content: hashable(data.content, sortOptions) }))
     .map(({ file, content }) => inPlace
-      ? fs.writeFile(file, JSON.stringify(content, null, 2), () => {})
+      ? fs.writeFile(file, JSON.stringify(content, null, 2), () => { })
       : content
     )
 
@@ -72,19 +72,19 @@ function hashable(data, { priority = defaultSort, sortObject = false } = {}) {
     // array
     if (Array.isArray(data[key])) {
       sorted[key] = data[key].filter(e => e !== null)
-      .sort((a, b) => {
-        if (['number', 'string'].includes(typeof a)) return sortBy(a, b)
+        .sort((a, b) => {
+          if (['number', 'string'].includes(typeof a)) return sortBy(a, b)
 
-        for (var i in priority) {
-          const field = priority[i]
-          const first = _get(a, field)
-          if (typeof first !== 'undefined') return sortBy(first, _get(b, field))
-        }
-        console.error('hashable sorting', a, b)
-      })
-      .map(obj => hashable(obj, { priority, sortObject }))
+          for (var i in priority) {
+            const field = priority[i]
+            const first = _get(a, field)
+            if (typeof first !== 'undefined') return sortBy(first, _get(b, field))
+          }
+          console.error('hashable sorting', a, b)
+        })
+        .map(obj => hashable(obj, { priority, sortObject }))
     }
-    
+
     // object
     else if (_isObject(data[key])) {
       sorted[key] = hashable(data[key], { priority, sortObject })
@@ -110,11 +110,11 @@ function sortBy(a, b) {
 
 function sortObjectByKeys(obj) {
   sorted = Object.keys(obj)
-  .sort()
-  .reduce((accumulator, key) => {
-    accumulator[key] = obj[key];
-    return accumulator;
-  }, {});
+    .sort()
+    .reduce((accumulator, key) => {
+      accumulator[key] = obj[key];
+      return accumulator;
+    }, {});
   return sorted;
 }
 
