@@ -1,18 +1,19 @@
 {
   "name": "hashable-json",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Generate consistent hashable JSON payload, great for piping through hash functions. Works in CLI and is importable",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/chernjie/hashable.git"
   },
   "author": "CJ Lim <lim@chernjie.com>",
-  "main": "index.js",
+  "main": "src/utils/hashable.js",
   "scripts": {
     "test": "jest"
   },
   "bin": {
-    "hashable": "index.js"
+    "hashable-json": "./bin/hashable",
+    "hashable": "./bin/hashable"
   },
   "license": "MIT",
   "dependencies": {},

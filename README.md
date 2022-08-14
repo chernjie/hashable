@@ -80,4 +80,3 @@ see [LICENSE](./LICENSE)
 
 - [json-hashable](https://www.npmjs.com/package/json-hashable) - sorts object keys only, arrays remain the same. Returns a hash but no longer a strict equal of the input payload
 - [json-hash](https://www.npmjs.com/package/json-hash) - Generates hash for JSON objects.
-
