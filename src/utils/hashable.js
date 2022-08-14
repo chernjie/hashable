@@ -10,6 +10,8 @@
  * @author CJ <lim@chernjie.com>
  */
 
+const defaultSort = require('../../config/priority')
+
 function hashable(data, { priority = defaultSort, sortObject = false } = {}) {
   if (!_isObject(data)) return data
 

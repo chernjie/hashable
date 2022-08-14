@@ -22,10 +22,10 @@ const fs = require('fs')
 const path = require('path')
 const { hashable } = require('./src/utils/hashable')
 const { readInput, parseArgs } = require('./src/utils/readInput')
-const defaultSort = ['id', '_id', 'name', 'category', 'value', 'label', 'page']
+const defaultSort = require('./config/priority')
 
 if (module && module.parent) {
-  module.exports = { hashable }
+  module.exports = hashable
 } else {
   useCommandLine(process.argv.slice(2))
 }
