@@ -4,13 +4,147 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <title>hashable-json</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <style>
+        h1,
+        h6 {
+            display: inline;
+            margin-right: 1em;
+        }
+
+        textarea {
+            width: 100%;
+            height: 88vh;
+        }
+
+        section {
+            clear: both;
+        }
+
+        button.play img {
+            width: 6em;
+        }
+
+        button.play img.play-circle,
+        button.play:hover img.play-circle-fill {
+            display: inherit;
+        }
+
+        button.play img.play-circle-fill,
+        button.play img.pause-circle,
+        button.play:hover img.play-circle,
+        button.play:hover img.pause-circle,
+        button.play:active img.play-circle,
+        button.play:active img.play-circle-fill {
+            display: none;
+        }
+
+        button.play:active img.pause-circle {
+            display: inherit;
+        }
+
+        /**
+         * https://tholman.com/github-corners/
+         */
+        .github-corner:hover .octo-arm {
+            animation: octocat-wave 560ms ease-in-out
+        }
+
+        @keyframes octocat-wave {
+
+            0%,
+            100% {
+                transform: rotate(0)
+            }
+
+            20%,
+            60% {
+                transform: rotate(-25deg)
+            }
+
+            40%,
+            80% {
+                transform: rotate(10deg)
+            }
+        }
+
+        @media (max-width:500px) {
+            .github-corner:hover .octo-arm {
+                animation: none
+            }
+
+            .github-corner .octo-arm {
+                animation: octocat-wave 560ms ease-in-out
+            }
+        }
+    </style>
+
 </head>
 
 <body>
-    <h1>Hello, world!</h1>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+    <header>
+        <a href="https://github.com/chernjie/hashable" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#64CEAA; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+                <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+                <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+                <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
+            </svg></a>
+        <h1>hashable-json</h1>
+        <h6>Generate consistent hashable JSON payload.</h6>
+    </header>
+    <section>
+        <div class="input-group mb-3">
+            <button type="button" class="btn btn-light">
+                <div class="form-check">
+                    <input id="sort-object" class="form-check-input" type="checkbox" checked>
+                    <label for="sort-object" class="form-check-label">
+                        sort object &nbsp; <code>--sort-object</code>
+                    </label>
+                </div>
+            </button>
+            <span class="input-group-text">Priority &nbsp; <code>--priority=</code></span>
+            <input type="text" name="priority" class="form-control" aria-label="array sorting priority" value="">
+        </div>
+    </section>
+
+    <section>
+        <div class="input-group mb-3">
+            <textarea class="form-control font-monospace" name="input" placeholder="input JSON"></textarea>
+            <span class="input-group-text">
+                <button type="button" class="btn btn-light play">
+                    <img class="play-circle" src="https://icons.getbootstrap.com/assets/icons/play.svg" />
+                    <img class="play-circle-fill" src="https://icons.getbootstrap.com/assets/icons/play-fill.svg" />
+                    <img class="pause-circle" src="https://icons.getbootstrap.com/assets/icons/pause.svg" />
+                </button>
+            </span>
+            <textarea class="form-control font-monospace" name="output"></textarea>
+        </div>
+    </section>
+
+    <script type="text/javascript">
+        const priorityEl = document.querySelector('input[name="priority"]')
+        document.querySelector('.play').addEventListener('click', () => {
+            const sortObject = document.querySelector('#sort-object').checked
+            const priority = priorityEl.value
+            const json = document.querySelector('textarea[name="input"]').value
+            const outputEl = document.querySelector('textarea[name="output"]')
+            try {
+                const output = hashable(JSON.parse(json), {
+                    sortObject,
+                    priority: priority.split(',')
+                })
+                outputEl.value = JSON.stringify(output, null, 2)
+            } catch (err) {
+                outputEl.value = err.toString()
+            }
+        })
+        fetch('./priority.json')
+            .then(json => json.json())
+            .then((sort = []) => priorityEl.value = sort.join(','))
+        const require = () => priorityEl.value.split(',')
+    </script>
+    <script type="text/javascript" src="./hashable.js" crossorigin="anonymous"></script>
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VG6WGRYVX"></script>
     <script>

@@ -9,6 +9,8 @@
   "author": "CJ Lim <lim@chernjie.com>",
   "main": "src/utils/hashable.js",
   "scripts": {
+    "build": "cp ./src/utils/hashable.js ./docs && cp ./config/priority.json ./docs",
+    "docs": "npm run build && node ./docs",
     "test": "jest"
   },
   "bin": {
@@ -18,6 +20,7 @@
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
+    "express": "^4.18.1",
     "jest": "^28.1.3"
   },
   "bugs": {
