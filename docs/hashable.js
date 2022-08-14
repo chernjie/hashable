@@ -74,4 +74,4 @@ function _isObject(obj) {
   return type === 'function' || (type === 'object' && !!obj)
 }
 
-if (module) module.exports = { hashable }
+if (module) module.exports = hashable

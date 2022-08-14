@@ -6,5 +6,8 @@
     "category",
     "value",
     "label",
-    "page"
+    "page",
+    "language",
+    "store_id",
+    "category_id"
 ]

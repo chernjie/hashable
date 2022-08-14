@@ -1,6 +1,6 @@
 {
   "name": "hashable-json",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Generate consistent hashable JSON payload, great for piping through hash functions. Works in CLI and is importable",
   "repository": {
     "type": "git",
