@@ -2,8 +2,14 @@
 
 /**
  * Generate consistent hashable JSON payload
- *   great for piping through hash functions
- *   (does not sort object keys)
+ *   great for piping through hash functions.
+ *   Works in CLI and importable
+ *
+ * Use --in-place to overwrite the original JSON file. Default: false
+ * Use --sort-object to sort object keys. Default: false
+ * Use --priority to specify array sorting
+ *   priority (default priority is used
+ *   if not specified)
  * 
  * Usage:
  *   $0 first.json second.json
@@ -15,7 +21,7 @@
 const fs = require('fs')
 const path = require('path')
 const { readInput, parseArgs } = require('./readInput')
-const defaultSort = ['language', 'id', 'name', 'store_id', 'category_id', 'value', 'label']
+const defaultSort = ['id', '_id', 'name', 'category', 'value', 'label', 'page']
 
 if (module && module.parent) {
   module.exports = {
@@ -27,19 +33,26 @@ if (module && module.parent) {
 
 async function useCommandLine(argv) {
   const { args, options } = parseArgs(argv)
+  const sortObject = options['sort-object'] || false
   const inPlace = options['in-place'] || false
-  const priority = (options['sort'] || '').split(',').concat(defaultSort)
+  if (options['sort']) console.error('@deprecated use --priority')
+  const priority = (options['priority'] || options['sort'] || '').split(',').concat(defaultSort)
+  const sortOptions = {
+    priority,
+    sortObject
+  }
   const fileInputHandler = files => files
     .map(file => path.resolve(process.cwd(), file))
     .map(file => ({ file, content: require(file) }))
-    .map(data => ({ ...data, content: hashable(data.content, priority) }))
+    .map(data => ({ ...data, content: hashable(data.content, sortOptions) }))
     .map(({ file, content }) => inPlace
-      ? fs.writeFile(file, JSON.stringify(content, null, 2), () => {})
+      ? fs.writeFile(file, JSON.stringify(content, null, 2), () => { })
       : content
     )
+
   const dataInputHandler = data => {
     try {
-      return hashable(JSON.parse(data), priority)
+      return hashable(JSON.parse(data), sortOptions)
     } catch (e) {
       console.error('JSON.parse', e)
       process.exit(1)
@@ -52,30 +65,48 @@ async function useCommandLine(argv) {
   }
 }
 
-function hashable(data, priority = defaultSort) {
+function hashable(data, { priority = defaultSort, sortObject = false } = {}) {
   if (!_isObject(data)) return data
 
+  const sorted = {}
   Object.keys(data).forEach(key => {
+    // array
     if (Array.isArray(data[key])) {
-      data[key] = data[key].filter(e => e !== null).sort((a, b) => {
-        if (['number', 'string'].includes(typeof a)) return sortBy(a, b)
+      sorted[key] = data[key].filter(e => e !== null)
+        .sort((a, b) => {
+          if (['number', 'string'].includes(typeof a)) return sortBy(a, b)
 
-        for (var i in priority) {
-          const field = priority[i]
-          const first = _get(a, field)
-          if (typeof first !== 'undefined') return sortBy(first, _get(b, field))
-        }
-        console.error('hashable sorting', a, b)
-      })
-      return data[key].map(obj => hashable(obj, priority))
+          for (var i in priority) {
+            const field = priority[i]
+            const first = _get(a, field)
+            if (typeof first !== 'undefined') return sortBy(first, _get(b, field))
+          }
+          console.error('hashable sorting', a, b)
+        })
+        .map(obj => hashable(obj, { priority, sortObject }))
     }
-    if (_isObject(data[key])) {
-      return hashable(data[key], priority)
+
+    // object
+    else if (_isObject(data[key])) {
+      sorted[key] = hashable(data[key], { priority, sortObject })
     }
-    return data[key]
+
+    // primitive
+    else {
+      sorted[key] = data[key]
+    }
   })
 
-  return data
+  if (sortObject) {
+    return Object.keys(sorted)
+      .sort()
+      .reduce((accumulator, key) => {
+        accumulator[key] = sorted[key]
+        return accumulator
+      }, {})
+  }
+
+  return sorted
 }
 
 function sortBy(a, b) {
