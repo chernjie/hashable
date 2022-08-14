@@ -1,3 +1,7 @@
+[![Node.js CI](https://github.com/chernjie/hashable/actions/workflows/node.js.yml/badge.svg)](https://github.com/chernjie/hashable/actions/workflows/node.js.yml)
+[![Node.js Package](https://github.com/chernjie/hashable/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/chernjie/hashable/actions/workflows/npm-publish.yml)
+[![pages-build-deployment](https://github.com/chernjie/hashable/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/chernjie/hashable/actions/workflows/pages/pages-build-deployment)
+
 # hashable-json
 
 Generate consistent hashable JSON payload, great for piping through hash functions.
