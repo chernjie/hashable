@@ -2,10 +2,11 @@
 
 /**
  * Generate consistent hashable JSON payload
- *   great for piping through hash functions
- * Use --sort-object to sort object keys
- * Use --in-place to overwrite the original
- *   JSON payload
+ *   great for piping through hash functions.
+ *   Works in CLI and importable
+ *
+ * Use --in-place to overwrite the original JSON file. Default: false
+ * Use --sort-object to sort object keys. Default: false
  * Use --priority to specify array sorting
  *   priority (default priority is used
  *   if not specified)
@@ -67,7 +68,7 @@ async function useCommandLine(argv) {
 function hashable(data, { priority = defaultSort, sortObject = false } = {}) {
   if (!_isObject(data)) return data
 
-  let sorted = {}
+  const sorted = {}
   Object.keys(data).forEach(key => {
     // array
     if (Array.isArray(data[key])) {
@@ -97,7 +98,12 @@ function hashable(data, { priority = defaultSort, sortObject = false } = {}) {
   })
 
   if (sortObject) {
-    sorted = sortObjectByKeys(sorted)
+    return Object.keys(sorted)
+      .sort()
+      .reduce((accumulator, key) => {
+        accumulator[key] = sorted[key]
+        return accumulator
+      }, {})
   }
 
   return sorted
@@ -106,16 +112,6 @@ function hashable(data, { priority = defaultSort, sortObject = false } = {}) {
 function sortBy(a, b) {
   if (a === b) return 0
   return a > b ? 1 : -1
-}
-
-function sortObjectByKeys(obj) {
-  sorted = Object.keys(obj)
-    .sort()
-    .reduce((accumulator, key) => {
-      accumulator[key] = obj[key];
-      return accumulator;
-    }, {});
-  return sorted;
 }
 
 function _get(obj, path) {
