@@ -14,6 +14,7 @@
     "test": "jest"
   },
   "bin": {
+    "hashable-cli": "./bin/hashable",
     "hashable-json": "./bin/hashable",
     "hashable": "./bin/hashable"
   },
@@ -28,8 +29,13 @@
   },
   "homepage": "https://github.com/chernjie/hashable#readme",
   "keywords": [
+    "stable",
+    "sort",
+    "deterministic",
+    "hashable-cli",
     "hashable",
     "json",
+    "command-line",
     "cli",
     "hash"
   ]

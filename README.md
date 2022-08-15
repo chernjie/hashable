@@ -12,6 +12,8 @@ Generate consistent hashable JSON payload, great for piping through hash functio
 - supports in-place modification of JSON file
 - great for storing JSON in Git
 
+Try it in the browser at https://chernjie.github.io/hashable/
+
 ## Command Line Usage
 
 ### Installation
@@ -82,5 +84,6 @@ see [LICENSE](./LICENSE)
 
 ## Alternatives you might prefer
 
+- [json-stable-stringify](https://www.npmjs.com/package/json-stable-stringify) - deterministic version of `JSON.stringify()` so you can get a consistent hash from stringified results
 - [json-hashable](https://www.npmjs.com/package/json-hashable) - sorts object keys only, arrays remain the same. Returns a hash but no longer a strict equal of the input payload
 - [json-hash](https://www.npmjs.com/package/json-hash) - Generates hash for JSON objects.
