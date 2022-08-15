@@ -2,13 +2,13 @@
 [![Node.js Package](https://github.com/chernjie/hashable/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/chernjie/hashable/actions/workflows/npm-publish.yml)
 [![pages-build-deployment](https://github.com/chernjie/hashable/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/chernjie/hashable/actions/workflows/pages/pages-build-deployment)
 
-# hashable-json
+# hashable-cli
 
 Generate consistent hashable JSON payload, great for piping through hash functions.
 
 - sort arrays by predefined keys
 - sort object by keys (optional)
-- works as module, command line tool and in browser
+- works as command line tool, module and in browser
 - supports in-place modification of JSON file
 - great for storing JSON in Git
 
@@ -19,32 +19,32 @@ Try it in the browser at https://chernjie.github.io/hashable/
 ### Installation
 
 ```shell
-npm i -g hashable-json
+npm i -g hashable-cli
 ```
 
 ### Example
 
 #### via stdin
 ```shell
-cat file.json | npx hashable-json > sorted.json
+cat file.json | npx hashable-cli > sorted.json
 ```
 
 #### as argument
 
 ```shell
-npx hashable-json file.json > sorted.json
+npx hashable-cli file.json > sorted.json
 ```
 
 #### as argument and in-place overwriting file
 
 ```shell
-npx hashable-json --in-place file.json
+npx hashable-cli --in-place file.json
 ```
 
 #### using priority option for sorting arrays
 
 ```shell
-npx hashable-json --priority=id,label file.json
+npx hashable-cli --priority=id,label file.json
 ```
 
 ## Module Usage
@@ -52,13 +52,13 @@ npx hashable-json --priority=id,label file.json
 ### Installation
 
 ```shell
-npm i --save hashable-json
+npm i --save hashable-cli
 ```
 
 ### Example
 
 ```javascript
-import hashable from 'hashable-json'
+import hashable from 'hashable-cli'
 import md5 from "md5"
 
 const sorted1 = hashable({ a: 'b', c: ['e', 'd']}, { sortObject: true })

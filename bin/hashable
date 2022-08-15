@@ -24,11 +24,7 @@ const hashable = require('../src/utils/hashable')
 const { readInput, parseArgs } = require('../src/utils/readInput')
 const defaultSort = require('../config/priority')
 
-if (module && module.parent) {
-  module.exports = hashable
-} else {
-  useCommandLine(process.argv.slice(2))
-}
+useCommandLine(process.argv.slice(2))
 
 async function useCommandLine(argv) {
   const { args, options } = parseArgs(argv)
