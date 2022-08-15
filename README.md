@@ -84,13 +84,23 @@ see [LICENSE](./LICENSE)
 
 ## Alternatives you might prefer
 
-- <!-- 118 lastpub1 --> [safe-stable-stringify](https://www.npmjs.com/package/safe-stable-stringify) - Safe, deterministic and fast serialization alternative to `JSON.stringify`. Zero dependencies. ESM and CJS. 100% coverage.
-- <!-- 1690, lastpub7 --> [json-stable-stringify](https://www.npmjs.com/package/json-stable-stringify) - deterministic version of `JSON.stringify()` so you can get a consistent hash from stringified results
-- <!-- 1056, lastpub3 -->  [fast-json-stable-stringify](https://www.npmjs.com/package/fast-json-stable-stringify) - Deterministic `JSON.stringify()` - a faster version of @substack's `json-stable-strigify` without `jsonify`.
-- <!-- 679 lastpub1 --> [fast-safe-stringify](https://www.npmjs.com/package/fast-safe-stringify) - Safe and fast serialization alternative to `JSON.stringify`.
-- <!-- 437 lastpub6 --> [json-stable-stringify-without-jsonify](https://www.npmjs.com/package/json-stable-stringify-without-jsonify)
-- <!-- 347 lastpub1 --> [sort-keys](https://www.npmjs.com/package/sort-keys) - Useful to get a deterministically ordered object, as the order of keys can vary between engines.
-- <!-- 47 lastpub6 --> [fast-stable-stringify](https://www.npmjs.com/package/fast-stable-stringify) - faster `json-stable-stringify`
-- <!-- 27 lastpub6 --> [json-hash](https://www.npmjs.com/package/json-hash) - Generates hash for JSON objects.
-- <!-- 14 lastpub4 --> [fastest-stable-stringify](https://www.npmjs.com/package/fastest-stable-stringify) - Deterministic `JSON.stringify()` - fastest stable JSON stringifier. This project combines `fast-json-stable-stringify` and `fast-stable-stringify` to create the fastest stable JSON stringifier
-- <!-- 0 lastpub5 --> [json-hashable](https://www.npmjs.com/package/json-hashable) - sorts object keys only, arrays remain the same. Returns a hash but no longer a strict equal of the input payload
+<!-- 118 lastpub1 -->
+- [safe-stable-stringify](https://www.npmjs.com/package/safe-stable-stringify) - Safe, deterministic and fast serialization alternative to `JSON.stringify`. Zero dependencies. ESM and CJS. 100% coverage.
+<!-- 1690 lastpub7 -->
+- [json-stable-stringify](https://www.npmjs.com/package/json-stable-stringify) - deterministic version of `JSON.stringify()` so you can get a consistent hash from stringified results
+<!-- 1056 lastpub3 -->
+-  [fast-json-stable-stringify](https://www.npmjs.com/package/fast-json-stable-stringify) - Deterministic `JSON.stringify()` - a faster version of @substack's `json-stable-strigify` without `jsonify`.
+<!-- 679 lastpub1 -->
+- [fast-safe-stringify](https://www.npmjs.com/package/fast-safe-stringify) - Safe and fast serialization alternative to `JSON.stringify`.
+<!-- 437 lastpub6 -->
+- [json-stable-stringify-without-jsonify](https://www.npmjs.com/package/json-stable-stringify-without-jsonify)
+<!-- 347 lastpub1 -->
+- [sort-keys](https://www.npmjs.com/package/sort-keys) - Useful to get a deterministically ordered object, as the order of keys can vary between engines.
+<!-- 47 lastpub6 -->
+- [fast-stable-stringify](https://www.npmjs.com/package/fast-stable-stringify) - faster `json-stable-stringify`
+<!-- 27 lastpub6 -->
+- [json-hash](https://www.npmjs.com/package/json-hash) - Generates hash for JSON objects.
+<!-- 14 lastpub4 -->
+- [fastest-stable-stringify](https://www.npmjs.com/package/fastest-stable-stringify) - Deterministic `JSON.stringify()` - fastest stable JSON stringifier. This project combines `fast-json-stable-stringify` and `fast-stable-stringify` to create the fastest stable JSON stringifier
+<!-- 0 lastpub5 -->
+- [json-hashable](https://www.npmjs.com/package/json-hashable) - sorts object keys only, arrays remain the same. Returns a hash but no longer a strict equal of the input payload
