@@ -10,7 +10,7 @@
         h1,
         h6 {
             display: inline;
-            margin-right: 1em;
+            margin-right: 1rem;
         }
 
         span.input-group-text a {
@@ -27,7 +27,17 @@
         }
 
         button.play img {
-            width: 6em;
+            width: 6rem;
+        }
+
+        @media (max-width:500px) {
+            textarea {
+                height: 68vh;
+            }
+
+            button.play img {
+                width: 2rem;
+            }
         }
 
         button.play img.play-circle,
