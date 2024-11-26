@@ -1,4 +1,4 @@
-const hashable = require('../hashable')
+import hashable from '../hashable.js'
 
 const sample1 = {
     "id": "0002",

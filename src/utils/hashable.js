@@ -10,7 +10,7 @@
  * @author CJ <lim@chernjie.com>
  */
 
-const defaultSort = require('../../config/priority')
+import defaultSort from '../../config/priority.json'
 
 function hashable(data, { priority = defaultSort, sortObject = false } = {}) {
   if (!_isObject(data)) return data
@@ -74,4 +74,4 @@ function _isObject(obj) {
   return type === 'function' || (type === 'object' && !!obj)
 }
 
-if (module) module.exports = hashable
+export default hashable
