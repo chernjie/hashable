@@ -18,11 +18,10 @@
  * @author CJ <lim@chernjie.com>
  */
 
-const fs = require('fs')
-const path = require('path')
-const hashable = require('../src/utils/hashable')
-const { readInput, parseArgs } = require('../src/utils/readInput')
-const defaultSort = require('../config/priority')
+import fs from 'fs'
+import path from 'path'
+import hashable, { getDefaultPriority } from '../src/utils/hashable.js'
+import { readInput, parseArgs } from '../src/utils/readInput.js'
 
 useCommandLine(process.argv.slice(2))
 
@@ -31,17 +30,14 @@ async function useCommandLine(argv) {
   const sortObject = options['sort-object'] || false
   const inPlace = options['in-place'] || false
   if (options['sort']) console.error('@deprecated use --priority')
-  const priority = (options['priority'] || options['sort'] || '').split(',').concat(defaultSort)
-  const sortOptions = {
-    priority,
-    sortObject
-  }
+  const priority = (options['priority'] || options['sort'] || '').split(',').concat(getDefaultPriority())
+  const sortOptions = { priority, sortObject }
   const fileInputHandler = files => files
     .map(file => path.resolve(process.cwd(), file))
-    .map(file => ({ file, content: require(file) }))
+    .map(file => ({ file, content: JSON.parse(fs.readFileSync(file, 'utf8')) }))
     .map(data => ({ ...data, content: hashable(data.content, sortOptions) }))
     .map(({ file, content }) => inPlace
-      ? fs.writeFile(file, JSON.stringify(content, null, 2), () => { })
+      ? fs.promises.writeFile(file, JSON.stringify(content, null, 2), () => { })
       : content
     )
 

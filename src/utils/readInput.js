@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const fs = require('fs')
+import { readFileSync } from 'fs'
 
 async function sampleUsage() {
   const { args, options } = parseArgs(process.argv.slice(2))
@@ -12,7 +12,7 @@ async function sampleUsage() {
   printJSON(input)
 }
 
-function readInput({ args }, argvCallback, stdinCallback) {
+export function readInput({ args }, argvCallback, stdinCallback) {
   return new Promise((resolve, reject) => {
     if (args.length) {
       return resolve(argvCallback(args))
@@ -24,7 +24,7 @@ function readInput({ args }, argvCallback, stdinCallback) {
   })
 }
 
-function parseArgs(argv) {
+export function parseArgs(argv) {
   return argv.reduce((last, arg)=> {
       if (/^--/.test(arg)) {
         const equals = arg.split('=')
@@ -37,17 +37,10 @@ function parseArgs(argv) {
   )
 }
 
-function readFiles(files) {
-  return files.map(file => fs.readFileSync(file).toString())
+export function readFiles(files) {
+  return files.map(file => readFileSync(file).toString())
 }
 
-function printJSON(data) {
+export function printJSON(data) {
   console.log(JSON.stringify(data, null, 2))
-}
-
-module.exports = {
-  parseArgs,
-  readInput,
-  readFiles,
-  printJSON,
 }
