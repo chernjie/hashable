@@ -18,40 +18,55 @@
  * @author CJ <lim@chernjie.com>
  */
 
-import fs from 'fs'
+import { readFile, writeFile } from 'fs/promises'
 import path from 'path'
 import hashable, { getDefaultPriority } from '../src/utils/hashable.js'
-import { readInput, parseArgs } from '../src/utils/readInput.js'
+import { parseArgs } from '../src/utils/readInput.js'
+const STDIN = 'stdin'
 
 useCommandLine(process.argv.slice(2))
 
 async function useCommandLine(argv) {
   const { args, options } = parseArgs(argv)
+  if (!args.length && !options.stdin) {
+    throw new Error('No input provided')
+  }
+
   const sortObject = options['sort-object'] || false
   const inPlace = options['in-place'] || false
   if (options['sort']) console.error('@deprecated use --priority')
   const priority = (options['priority'] || options['sort'] || '').split(',').concat(getDefaultPriority())
   const sortOptions = { priority, sortObject }
-  const fileInputHandler = files => files
-    .map(file => path.resolve(process.cwd(), file))
-    .map(file => ({ file, content: JSON.parse(fs.readFileSync(file, 'utf8')) }))
-    .map(data => ({ ...data, content: hashable(data.content, sortOptions) }))
-    .map(({ file, content }) => inPlace
-      ? fs.promises.writeFile(file, JSON.stringify(content, null, 2), () => { })
-      : content
+
+  return (await Promise.allSettled(readInput(args, options)))
+    .filter(res => res.status === 'fulfilled')
+    .map(res => res.value)
+    .map(({ file, content }) => ({
+      file,
+      content: [
+        cntt => JSON.parse(cntt),
+        cntt => hashable(cntt, sortOptions),
+        cntt => JSON.stringify(cntt, null, 2),
+      ].reduce((cntt, fn) => fn(cntt), content)
+    }))
+    .forEach(({ file, content }) =>
+      inPlace && file != STDIN
+        ? writeFile(file, content).catch(err => console.error(err, file))
+        : process.stdout.write(content)
     )
+}
 
-  const dataInputHandler = data => {
-    try {
-      return hashable(JSON.parse(data), sortOptions)
-    } catch (e) {
-      console.error('JSON.parse', e)
-      process.exit(1)
-    }
-  }
-
-  const formatted = await readInput({ args }, fileInputHandler, dataInputHandler)
-  if (!inPlace) {
-    process.stdout.write(JSON.stringify(formatted, null, 2))
-  }
+function readInput(args, { stdin }) {
+  return args.length
+    ? args
+      .map(file => path.resolve(process.cwd(), file))
+      .map(async file => ({
+        file,
+        content: await readFile(file).then(res => res.toString()),
+      }))
+    : [stdin]
+      .map(async (stdin) => ({
+        file: STDIN,
+        content: await stdin
+      }))
 }
