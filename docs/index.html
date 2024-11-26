@@ -143,23 +143,42 @@
 
     <script type="module">
         import hashable, { getDefaultPriority } from './hashable.js'
-        const priorityEl = document.querySelector('input[name="priority"]')
-        priorityEl.value = getDefaultPriority().join(',')
-        document.querySelector('.play').addEventListener('click', () => {
-            const sortObject = document.querySelector('#sort-object').checked
-            const priority = priorityEl.value
-            const json = document.querySelector('textarea[name="input"]').value
+
+        (() => {
+            const sortObjectEl = document.querySelector('input#sort-object')
+            const priorityEl = document.querySelector('input[name="priority"]')
+            const jsonInputEl = document.querySelector('textarea[name="input"]')
             const outputEl = document.querySelector('textarea[name="output"]')
-            try {
-                const output = hashable(JSON.parse(json), {
-                    sortObject,
-                    priority: priority.split(',')
-                })
-                outputEl.value = JSON.stringify(output, null, 2)
-            } catch (err) {
-                outputEl.value = err.toString()
+            const playButtonEl = document.querySelector('.play')
+
+            function updateURL(sortObject, priority) {
+                const url = new URL(window.location)
+                url.searchParams.set('sortObject', sortObject)
+                url.searchParams.set('priority', priority)
+                window.history.pushState({}, '', url)
             }
-        })
+
+            // set initial values from url
+            const url = new URL(window.location)
+            sortObjectEl.checked = !url.searchParams.get('sortObject') || url.searchParams.get('sortObject') === 'true'
+            priorityEl.value = url.searchParams.get('priority') || getDefaultPriority().join(',')
+            jsonInputEl.focus()
+
+            playButtonEl.addEventListener('click', () => {
+                const sortObject = sortObjectEl.checked
+                const priority = priorityEl.value
+                try {
+                    const output = hashable(JSON.parse(jsonInputEl.value), {
+                        sortObject,
+                        priority: priority.split(',')
+                    })
+                    outputEl.value = JSON.stringify(output, null, 2)
+                    updateURL(sortObject, priority)
+                } catch (err) {
+                    outputEl.value = err.toString()
+                }
+            })
+        })()
     </script>
 
     <!-- Google tag (gtag.js) -->
