@@ -20,6 +20,26 @@ Published as an ES module and compatible with both Node.js and browser environme
 [Try it in the browser](https://chernjie.github.io/hashable/)  (Live Demo)
 
 
+## Breaking changes in v2.0.0
+
+### ES Module Support
+
+The entire project now uses ES modules. This affects both how the library is imported/required and how the CLI is executed.
+
+Impact: Users in older environments without ES module support will need to update their Node.js versions or use a build process that handles ES modules.
+
+### Removal of config/priority.json
+
+The default priority is now handled internally in `hashable.js`.
+
+Impact: Users who relied on customizing the default priority by modifying `config/priority.json` will need to use `getDefaultPriority()` to retrieve the default and create a modified copy.
+
+### Consistent CLI Output for Single File
+
+The CLI now returns a single JSON object (not wrapped in an array) for single file input without `--in-place`. This makes the output consistent with `stdin` handling.
+
+Impact: User scripts or tools that relied on the previous array output (even for single files) will need to be updated to handle a single JSON object.
+
 ## Command Line Usage
 
 ### Installation
@@ -96,7 +116,9 @@ CLI Flag | Module Option | Default | Description
 
 see [LICENSE](./LICENSE)
 
-## Alternatives you might consider
+## Alternatives
+
+Consider these alternatives if `hashable-cli` doesn't fully meet your needs. Please check the latest status of these projects:
 
 <!-- 118 lastpub1 -->
 - [safe-stable-stringify](https://www.npmjs.com/package/safe-stable-stringify) - Safe, deterministic and fast serialization alternative to `JSON.stringify`. Zero dependencies. ESM and CJS. 100% coverage.
