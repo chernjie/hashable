@@ -4,27 +4,37 @@
 
 # hashable-cli
 
-Generate consistent hashable JSON payload, great for piping through hash functions.
+Generate consistent, hashable JSON output for use in command-line interfaces, Node.js modules, and web browsers.  Sorts arrays based on configurable priority, optionally sorts object keys, and supports in-place file modification. Ideal for hashing, deterministic comparisons, and version control of JSON data.
 
-- sort arrays by predefined keys
-- sort object by keys (optional)
-- works as command line tool, module and in browser
-- supports in-place modification of JSON file
-- great for storing JSON in Git
+Published as an ES module and compatible with both Node.js and browser environments.
 
-Try it in the browser at https://chernjie.github.io/hashable/
+## Features
+
+- Sorts arrays by predefined keys.
+- Optionally sorts object keys (`--sort-object` or `sortObject` option).
+- Works as a command-line tool, a module, and in the browser.
+- Supports in-place modification of JSON files (`--in-place` option).
+- Great for storing JSON in Git (deterministic output).
+- Uses modern ES modules for easy integration into contemporary JavaScript projects.
+
+[Try it in the browser](https://chernjie.github.io/hashable/)  (Live Demo)
+
 
 ## Command Line Usage
 
 ### Installation
 
 ```shell
-npm i -g hashable-cli
+# Install globally (for use as a CLI command anywhere):
+npm install -g hashable-cli
+
+# Install locally (for use within a specific project):
+npm install --save hashable-cli
 ```
 
 ### Example
 
-#### via stdin
+#### via stdin (pipe)
 ```shell
 cat file.json | npx hashable-cli > sorted.json
 ```
@@ -33,18 +43,12 @@ cat file.json | npx hashable-cli > sorted.json
 
 ```shell
 npx hashable-cli file.json > sorted.json
-```
 
-#### as argument and in-place overwriting file
+npx hashable-cli --in-place file.json # In-place modification
 
-```shell
-npx hashable-cli --in-place file.json
-```
+npx hashable-cli --priority=id,label file.json # Custom priority for sorting arrays
 
-#### using priority option for sorting arrays
-
-```shell
-npx hashable-cli --priority=id,label file.json
+npx hashable-cli --sort-object file.json # Sort object keys
 ```
 
 ## Module Usage
@@ -52,7 +56,7 @@ npx hashable-cli --priority=id,label file.json
 ### Installation
 
 ```shell
-npm i --save hashable-cli
+npm install --save hashable-cli
 ```
 
 ### Example
@@ -70,19 +74,29 @@ const hash2 = md5(JSON.stringify(sorted2))
 return hash1 === hash2
 ```
 
+#### Adjusting priority
+
+```javascript
+const appendPriority = getDefaultPriority().concat(['field1', 'field2']) // append to default priority
+const sorted3 = hashable(input, {priority: appendPriority })
+
+const overridePriority = ['field1', 'field2'] // override default priority
+const sorted4 = hashable(input, {priority: overridePriority})
+```
+
 ## Options
 
-Command Line | Module | Default | Description
+CLI Flag | Module Option | Default | Description
 -- | -- | -- | --
-`--in-place` | N/A | `false` | to overwrite the original JSON file
-`--sort-object` | `sortObject` | `false` | to sort object keys.
-`--priority` | `priority` | see [priority](https://github.com/chernjie/hashable/blob/main/config/priority.json) | to specify array sorting priority (default priority is used if not specified). In CLI-mode, use comma-separated strings to specify multiple sort keys. e.g. `--priority=id,label`
+`--in-place` | N/A | `false` | Overwrite the original JSON file (CLI only)
+`--sort-object` | `sortObject` | `false` | Sort object keys alphabetically.
+`--priority` | `priority` | `id`, `_id`, `name`, `key`, `category`, `value`, `label`, `page`, `language`, `store_id`, `category_id` | Specify the priority for sorting arrays. Provide an array of strings (field names) in module usage. In CLI mode, provide a comma-separated string of field names. e.g. `--priority=id,label`
 
 ## License
 
 see [LICENSE](./LICENSE)
 
-## Alternatives you might prefer
+## Alternatives you might consider
 
 <!-- 118 lastpub1 -->
 - [safe-stable-stringify](https://www.npmjs.com/package/safe-stable-stringify) - Safe, deterministic and fast serialization alternative to `JSON.stringify`. Zero dependencies. ESM and CJS. 100% coverage.
