@@ -1,6 +1,6 @@
 {
   "name": "hashable-cli",
-  "version": "1.1.3",
+  "version": "2.0.0",
   "type": "module",
   "description": "Generate consistent hashable JSON payload, great for piping through hash functions. Works in CLI and is importable",
   "repository": {
