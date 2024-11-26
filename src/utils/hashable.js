@@ -3,16 +3,31 @@
  *   great for piping through hash functions.
  *
  * Use `sortObject` to sort object keys. Default: false
- * Use `priority` to specify array sorting
- *   priority (default priority is used
- *   if not specified)
+ * Use `priority` to specify array sorting priority
+ *   (default priority is used if not specified)
  * 
  * @author CJ <lim@chernjie.com>
  */
 
-import defaultSort from '../../config/priority.json'
+const defaultSort = [
+  "id",
+  "_id",
+  "name",
+  "key",
+  "category",
+  "value",
+  "label",
+  "page",
+  "language",
+  "store_id",
+  "category_id",
+]
 
-function hashable(data, { priority = defaultSort, sortObject = false } = {}) {
+export function getDefaultPriority() {
+  return [...defaultSort]
+}
+
+function hashable(data, { priority = getDefaultPriority(), sortObject = false } = {}) {
   if (!_isObject(data)) return data
 
   const sorted = {}
