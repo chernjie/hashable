@@ -13,7 +13,7 @@
     ".": "./src/utils/hashable.js"
   },
   "scripts": {
-    "build": "cp ./src/utils/hashable.js ./docs && cp ./config/priority.json ./docs",
+    "build": "cp ./src/utils/hashable.js ./docs",
     "docs": "npm run build && node ./docs",
     "test": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" jest"
   },

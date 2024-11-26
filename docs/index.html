@@ -141,8 +141,10 @@
         </div>
     </section>
 
-    <script type="text/javascript">
+    <script type="module">
+        import hashable, { getDefaultPriority } from './hashable.js'
         const priorityEl = document.querySelector('input[name="priority"]')
+        priorityEl.value = getDefaultPriority().join(',')
         document.querySelector('.play').addEventListener('click', () => {
             const sortObject = document.querySelector('#sort-object').checked
             const priority = priorityEl.value
@@ -158,12 +160,7 @@
                 outputEl.value = err.toString()
             }
         })
-        fetch('./priority.json')
-            .then(json => json.json())
-            .then((sort = []) => priorityEl.value = sort.join(','))
-        const require = () => priorityEl.value.split(',')
     </script>
-    <script type="text/javascript" src="./hashable.js" crossorigin="anonymous"></script>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VG6WGRYVX"></script>
