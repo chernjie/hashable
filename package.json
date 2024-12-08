@@ -1,6 +1,6 @@
 {
   "name": "hashable-cli",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "type": "module",
   "description": "Generate consistent and predictable JSON output for hashing, version control, and testing.  Sorts arrays based on a configurable priority list of fields, handles nested objects and arrays, and optionally sorts object keys alphabetically.  Provides a command-line interface, can be imported as a Node.js module, and works seamlessly in web browsers. Ideal for ensuring data integrity, simplifying comparisons, and generating stable hashes for JSON data.",
   "repository": {
